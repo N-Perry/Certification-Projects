@@ -13,12 +13,13 @@ This project was built using the MERN stack (MongoDB, Express.js, React.js, Node
 I am also proud to say that the front end for this project was entirely built using React Hooks (as opposed to class-components)! React is an exciting library that continues to grow, and i hope to grow along with it :)
 
 Other relevant tools & modules include:
-- Mongoose
-- react-router-dom v6
-- uuidv4
-- body-parser
-- CSSTransition from react-transition-group 
-- React Hooks (useState, useEffect, useContext, useReducer, useRef)
+- [Mongoose](https://mongoosejs.com/)
+- [react-router-dom v6](https://reactrouter.com/docs/en/v6)
+- [body-parser](https://github.com/expressjs/body-parser#readme)
+- [express-validator](https://express-validator.github.io/docs/)
+- [uuidv4](https://github.com/uuidjs/uuid#readme)
+- [CSSTransition](http://reactcommunity.org/react-transition-group/css-transition) from react-transition-group
+- [React Hooks](https://reactjs.org/docs/hooks-intro.html) (useState, useEffect, useContext, useReducer, useRef)]
 
 ## SPA Routes
 
