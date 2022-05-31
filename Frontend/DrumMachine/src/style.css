@@ -1,0 +1,58 @@
+body {
+  background-color: black;
+}
+
+#root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+div {
+    display: block;
+}
+
+.inner-container .pad-bank {
+    width: 332px;
+    height: 272px;
+    display: inline-block;
+    margin: 20px;
+}
+
+.inner-container .pad-bank .drum-pad {
+    position: relative;
+    float: left;
+    width: 100px;
+    height: 80px;
+    margin-right: 10px;
+    border-radius: 5px;
+    padding-top: 35px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.inner-container . {
+    width: 240px;
+    height: 172px;
+    display: inline-block;
+    margin: 40px 20px 0 10px;
+    vertical-align: top;
+}
+
+.inner-container {
+    outline: 5px solid #33C2F6;
+    position: relative;
+    width: 660px;
+    text-align: center;
+    background-color: #223D47;
+}
+
+.inner-container #display {
+    width: 200px;
+    background-color: #BCDEEB;
+    margin: 15px auto;
+    padding: 15px;
+    box-sizing: border-box;
+    outline: 2px solid #33C2F6;
+}
