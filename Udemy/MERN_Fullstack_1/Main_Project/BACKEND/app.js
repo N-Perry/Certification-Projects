@@ -1,12 +1,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
 const placesRoutes = require("./routes/places-routes");
 const usersRoutes = require("./routes/users-routes");
 const HttpError = require("./models/http-error");
-const { mongoKey } = require('./sneaky');
-console.log(mongoKey);
+const { MONGO_KEY } = require("./sneaky");
 
 const app = express();
 
@@ -29,11 +28,13 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "An unknown error occurred!" });
 }); // no path & 4th argument (which is really the first argument, 'error') means Express.js will recognize this function as an 'error-handling' middleware function.
 
-/* const url = ''
-mongoose.connect().then(() => {
-  app.listen(5000);
-}).catch(error => {
-  console.log(error);
-}); */
-app.listen(5000);
-
+// must have your own MongoDB '<username>:<password>' in place of mongoKey
+const mongoUrl = `mongodb+srv://${MONGO_KEY}@myfirstcluster.mj6hp.mongodb.net/places?retryWrites=true&w=majority`;
+mongoose
+  .connect(mongoUrl)
+  .then(() => {
+    app.listen(5000);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
