@@ -1,19 +1,18 @@
 const axios = require("axios");
 
 const HttpError = require('../models/http-error');
-
-const API_KEY = ""; // MANUALLY FILL THIS IN WHENEVER YOU WANT TO USE GEOCODING FUNCTIONALITY, I'M SORRY I'M LAZY
+const { MAP_API_KEY } = require('../sneaky'); // get your own google key you sneaky guy >:)
 
 async function getCoordsForAddress(address) {
   const response = await axios.get(
     `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
       address
-    )}&key=${API_KEY}`
+    )}&key=${MAP_API_KEY}`
   );
 
   const data = response.data;
-  console.log(data);
 
+  // 'ZERO_RESULTS' apparently custom google response
   if (!data || data.status === 'ZERO_RESULTS') {
     const error = new HttpError('Could not find the location for the specified address.', 422);
     throw error;
