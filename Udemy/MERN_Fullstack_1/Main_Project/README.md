@@ -17,6 +17,7 @@ Other relevant tools & modules include:
 - [react-router-dom v6](https://reactrouter.com/docs/en/v6)
 - [body-parser](https://github.com/expressjs/body-parser#readme)
 - [express-validator](https://express-validator.github.io/docs/)
+- [mongoose-unique-validator](https://github.com/blakehaswell/mongoose-unique-validator#readme)
 - [uuidv4](https://github.com/uuidjs/uuid#readme)
 - [CSSTransition](http://reactcommunity.org/react-transition-group/css-transition) from react-transition-group
 - [React Hooks](https://reactjs.org/docs/hooks-intro.html) (useState, useEffect, useContext, useReducer, useRef)]
