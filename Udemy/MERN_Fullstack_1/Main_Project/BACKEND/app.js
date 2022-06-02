@@ -11,6 +11,13 @@ const app = express();
 
 app.use(bodyParser.json());
 
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*"); // * == any domain is allowed access to these responses, will bypass CORS error flag in browser.
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE') // controls which HTTP methods may be attached to incoming requests from frontend
+  next();
+});
+
 app.use("/api/places", placesRoutes); // => /api/places/...
 app.use("/api/users", usersRoutes); // => /api/users/...
 
