@@ -43,7 +43,7 @@ const Authenticate = (props) => {
     if (isLoginMode) {
       // remember, isLoginMode == !("signup mode")
       try {
-        await sendRequest(
+        const responseData = await sendRequest(
           "http://localhost:5000/api/users/login",
           "POST",
           JSON.stringify({
@@ -54,12 +54,12 @@ const Authenticate = (props) => {
             "Content-Type": "application/json",
           }
         );
-        auth.login();
+        auth.login(responseData.user.id);
       } catch (err) {}
     } else {
       // else if in signup mode...
       try {
-        await sendRequest(
+        const responseData = await sendRequest(
           "http://localhost:5000/api/users/signup",
           "POST",
           JSON.stringify({
@@ -72,7 +72,7 @@ const Authenticate = (props) => {
           }
         );
 
-        auth.login();
+        auth.login(responseData.user.id);
       } catch (err) {}
     }
   };
