@@ -7,7 +7,6 @@ const router = express.Router();
 
 router.get("/:pid", placesControllers.getPlaceById);
 
-// did this on my own! nice use of .filter() baby >:)
 router.get("/user/:uid", placesControllers.getPlacesByUserId);
 
 router.post(
