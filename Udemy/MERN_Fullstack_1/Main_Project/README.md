@@ -13,7 +13,7 @@ This project was built using the MERN stack (MongoDB, Express.js, React.js, Node
 I am also proud to say that the front end for this project was entirely built using React Hooks (as opposed to class-components)! React is an exciting library that continues to grow, and i hope to grow along with it :)
 
 Other relevant tools & modules include:
-- [Mongoose](https://mongoosejs.com/)
+- [Mongoose](https://mongoosejs.com/) (besides the basics, learned about Transactions and Populate)
 - [react-router-dom v6](https://reactrouter.com/docs/en/v6) (BrowserRouter, Routes, Route, Navigate, useNavigate)
 - [body-parser](https://github.com/expressjs/body-parser#readme)
 - [express-validator](https://express-validator.github.io/docs/)
