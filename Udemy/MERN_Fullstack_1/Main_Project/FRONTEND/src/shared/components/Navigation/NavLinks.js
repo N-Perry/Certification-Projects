@@ -16,7 +16,7 @@ const NavLinks = (props) => {
       </li>
       {auth.isLoggedIn && (
         <li>
-          <NavLink to="/:uid/places">MY PLACES</NavLink>
+          <NavLink to={`/${auth.userId}/places`}>MY PLACES</NavLink>
         </li>
       )}
       {auth.isLoggedIn && (
@@ -31,7 +31,9 @@ const NavLinks = (props) => {
       )}
       {auth.isLoggedIn && (
         <li>
-          <button onClick={auth.logout}>LOGOUT</button>
+          <NavLink to="/auth" onClick={auth.logout} > {/* got rid of <button onClick={auth.logout}>LOGOUT</button>, things seem to work? */}
+            LOGOUT
+          </NavLink>
         </li>
       )}
     </ul>
