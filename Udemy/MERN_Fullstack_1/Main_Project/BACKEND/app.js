@@ -1,3 +1,6 @@
+const fs = require('fs'); // built into Node.js
+const path = require('path') // built into Node.js
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -10,6 +13,8 @@ const { MONGO_KEY } = require("./sneaky");
 const app = express();
 
 app.use(bodyParser.json());
+
+app.use('/uploads/images', express.static(path.join('uploads', 'images')));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*"); // * == any domain is allowed access to these responses, will bypass CORS error flag in browser.
@@ -28,6 +33,12 @@ app.use((req, res, next) => {
 
 // will execute if any middleware in front of it yields an error.
 app.use((error, req, res, next) => {
+  if (req.file) {
+    fs.unlink(req.file.path, (err) => {
+      console.log(err);
+    });
+  }
+
   if (res.headerSent) {
     return next(error);
   }
