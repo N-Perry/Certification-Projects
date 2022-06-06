@@ -50,8 +50,7 @@ const signup = async (req, res, next) => {
   const createdUser = new User({
     name,
     email,
-    image:
-      "https://images.generated.photos/3hG2lL_AdvPOL3iwyOcxX2lStLtPV4qpi0kYP8qZDfI/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/NzM1MjMyLmpwZw.jpg",
+    image: req.file.path, 
     password,
     places: [],
   });
