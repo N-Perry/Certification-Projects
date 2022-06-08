@@ -67,7 +67,7 @@ const createPlace = async (req, res, next) => {
     ); // when working with async code, 'throw' won't work. must pass error into next()
   }
 
-  const { title, description, address, creator } = req.body;
+  const { title, description, address} = req.body;
   // const title = req.body.title;
 
   let coordinates;
@@ -84,13 +84,13 @@ const createPlace = async (req, res, next) => {
     address,
     location: coordinates,
     image: req.file.path,
-    creator,
+    creator: req.userData.userId
   });
 
   let user;
 
   try {
-    user = await User.findById(creator);
+    user = await User.findById(req.userData.userId);
   } catch (err) {
     const error = new HttpError(
       "Creating place failed, please try again.",
@@ -108,7 +108,7 @@ const createPlace = async (req, res, next) => {
     const sess = await mongoose.startSession();
     sess.startTransaction();
     await createdPlace.save({ session: sess });
-    user.places.push(createdPlace); // .push() here is a custom mongoose function that somehow grabs the createdPlace's id when given the createdPlace object? :/
+    user.places.push(createdPlace); 
     await user.save({ session: sess });
     await sess.commitTransaction();
   } catch (err) {
