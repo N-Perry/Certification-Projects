@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -15,22 +15,34 @@ import MainNavigation from "./shared/components/Navigation/MainNavigation.js";
 import { AuthContext } from "./shared/context/auth-context.js";
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState(false);
   const [userId, setUserId] = useState(null);
 
-  const login = useCallback((uid) => {
-    setIsLoggedIn(true);
+  const login = useCallback((uid, token) => {
+    setToken(token);
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({ userId: uid, token: token }) // global JS browser API to access local storage
+    ); 
     setUserId(uid);
   }, []);
 
   const logout = useCallback(() => {
-    setIsLoggedIn(false);
+    setToken(null);
     setUserId(null);
+    localStorage.removeItem('userData');
   }, []);
+
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem('userData'));
+    if (storedData && storedData.token) {
+      login(storedData.userId, storedData.token);
+    }
+  }, [login]);  
 
   let routes;
 
-  if (isLoggedIn) {
+  if (token) {
     routes = (
       <>
         <Route path="/" element={<Users />} />
@@ -54,7 +66,8 @@ const App = () => {
   return (
     <AuthContext.Provider
       value={{
-        isLoggedIn: isLoggedIn,
+        isLoggedIn: !!token,
+        token: token,
         userId: userId,
         login: login,
         logout: logout,
