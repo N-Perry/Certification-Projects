@@ -219,7 +219,9 @@ const deletePlace = async (req, res, next) => {
   }
 
   fs.unlink(imagePath, err => {
-    console.log(err);
+    if (err) {
+      console.log(err);
+    }
   });
 
   res.status(200).json({ message: "Deleted place with pid: " + placeId });
