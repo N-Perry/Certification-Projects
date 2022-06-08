@@ -14,31 +14,58 @@ import Authenticate from "./user/pages/Authenticate.js";
 import MainNavigation from "./shared/components/Navigation/MainNavigation.js";
 import { AuthContext } from "./shared/context/auth-context.js";
 
+let logoutTimer;
+
 const App = () => {
   const [token, setToken] = useState(false);
+  const [tokenExpirationDate, setTokenExpirationDate] = useState();
   const [userId, setUserId] = useState(null);
 
-  const login = useCallback((uid, token) => {
+  const login = useCallback((uid, token, expirationDate) => {
     setToken(token);
-    localStorage.setItem(
-      "userData",
-      JSON.stringify({ userId: uid, token: token }) // global JS browser API to access local storage
-    ); 
     setUserId(uid);
+    const tokenExpirationDate =
+      expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
+    setTokenExpirationDate(tokenExpirationDate);
+    localStorage.setItem( // global JS browser API to access local storage
+      "userData",
+      JSON.stringify({
+        userId: uid,
+        token: token,
+        expiration: tokenExpirationDate.toISOString(),
+      })
+    );
   }, []);
 
   const logout = useCallback(() => {
     setToken(null);
+    setTokenExpirationDate(null);
     setUserId(null);
-    localStorage.removeItem('userData');
+    localStorage.removeItem("userData");
   }, []);
 
+  // logout & remove localstorage userData if token has expired
   useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem('userData'));
-    if (storedData && storedData.token) {
-      login(storedData.userId, storedData.token);
+    if (token && tokenExpirationDate) {
+      const remainingTime = tokenExpirationDate.getTime() - new Date().getTime(); 
+      logoutTimer = setTimeout(logout, remainingTime);
+    } else {
+      clearTimeout(logoutTimer);
     }
-  }, [login]);  
+
+  }, [token, logout, tokenExpirationDate]);
+
+  // keep a user logged in on refresh if token hasn't expired
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem("userData"));
+    if (
+      storedData &&
+      storedData.token &&
+      new Date(storedData.expiration) > new Date()
+    ) {
+      login(storedData.userId, storedData.token, new Date(storedData.expiration));
+    }
+  }, [login]);
 
   let routes;
 
