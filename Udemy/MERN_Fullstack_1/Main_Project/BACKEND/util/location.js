@@ -1,7 +1,6 @@
 const axios = require("axios");
 
 const HttpError = require('../models/http-error');
-const { MAP_API_KEY } = require('../sneaky'); // get your own google key you sneaky guy >:)
 
 async function getCoordsForAddress(address) {
   const response = await axios.get(
