@@ -47,7 +47,7 @@ app.use((error, req, res, next) => {
 }); // no path & 4th argument (which is really the first argument, 'error') means Express.js will recognize this function as an 'error-handling' middleware function.
 
 // must have your own MongoDB '<username>:<password>' in place of mongoKey
-const mongoUrl = `mongodb+srv://${MONGO_KEY}@myfirstcluster.mj6hp.mongodb.net/places?retryWrites=true&w=majority`;
+const mongoUrl = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@myfirstcluster.mj6hp.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 mongoose
   .connect(mongoUrl)
   .then(() => {

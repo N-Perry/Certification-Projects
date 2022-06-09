@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
     if (!token) {
       throw new Error("Authentication Failed!");
     }
-    const decodedToken = jwt.verify(token, "supersecret_dont_share"); // returns an obj with info we bcrypted into token
+    const decodedToken = jwt.verify(token, process.env.JWT_KEY); // returns an obj with info we bcrypted into token
     req.userData = { userId: decodedToken.userId }; // you can always dynamically add data to the request object like this
     next();
   } catch (err) {
