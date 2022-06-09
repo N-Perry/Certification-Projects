@@ -9,7 +9,7 @@ const Map = (props) => {
 
   useEffect(() => {
     const map = new window.google.maps.Map(mapRef.current, {
-      center: props.center,
+      center,
       zoom,
     });
 
