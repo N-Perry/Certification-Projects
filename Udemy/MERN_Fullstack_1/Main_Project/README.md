@@ -1,5 +1,9 @@
 # Place-Sharing Website
 
+**I deployed this web app using Heroku & Firebase!**
+
+[Please check it out :)](https://fir-yourplaces.web.app/)
+
 ## Description
 
 This website allows users to see lists of places visited by other users, as well as detailed information about those places.
