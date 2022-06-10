@@ -1,13 +1,69 @@
-import React, { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 
+import Modal from "../UIElements/Modal";
+import ErrorModal from "../UIElements/ErrorModal";
+import Button from "../FormElements/Button";
+
+
+import { useHttpClient } from "../../hooks/http-hook";
 import { AuthContext } from "../../context/auth-context";
 import "./NavLinks.css";
 
 const NavLinks = (props) => {
+  const { error, sendRequest, clearError } = useHttpClient();
   const auth = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+  const showDeleteWarningHandler = () => {
+    setShowConfirmModal(true);
+  };
+
+  const cancelDeleteHandler = () => {
+    setShowConfirmModal(false);
+  };
+
+  const confirmDeleteHandler = async () => {
+    setShowConfirmModal(false);
+    console.log(JSON.stringify({id: auth.userId}));
+    try {
+      await sendRequest(
+        `${process.env.REACT_APP_BACKEND_URL}/users/${auth.userId}/delete`,
+        "DELETE",
+        null,
+        { Authorization: "Bearer " + auth.token }
+      );
+      auth.logout();
+      navigate("/auth");
+    } catch (err) {}
+  };
 
   return (
+    <>
+    <ErrorModal error={error} onClear={clearError} />
+    <Modal
+        show={showConfirmModal}
+        onCancel={cancelDeleteHandler}
+        header="are you sure?"
+        footerClass="place-item__modal-actions"
+        footer={
+          <>
+            <Button inverse onClick={cancelDeleteHandler}>
+              CANCEL
+            </Button>
+            <Button danger onClick={confirmDeleteHandler}>
+              DELETE
+            </Button>
+          </>
+        }
+      >
+        <p>
+          Do you want to proceed and delete this place? please note that it
+          can't be undone thereafter.
+        </p>
+      </Modal>
     <ul className="nav-links">
       <li>
         <NavLink to="/" exact="true">
@@ -36,7 +92,15 @@ const NavLinks = (props) => {
           </NavLink>
         </li>
       )}
+      {auth.isLoggedIn && (
+        <li>
+          <button onClick={showDeleteWarningHandler} > 
+            delete account
+          </button>
+        </li>
+      )}
     </ul>
+    </>
   );
 };
 

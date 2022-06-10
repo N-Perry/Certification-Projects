@@ -1,3 +1,6 @@
+const fs = require("fs");
+const mongoose = require("mongoose");
+
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -80,7 +83,7 @@ const signup = async (req, res, next) => {
   try {
     token = jwt.sign(
       { userId: createdUser.id, email: createdUser.email },
-      process.env.JWT_KEY, 
+      process.env.JWT_KEY,
       { expiresIn: "1h" }
     );
   } catch (err) {
@@ -140,7 +143,7 @@ const login = async (req, res, next) => {
   try {
     token = jwt.sign(
       { userId: existingUser.id, email: existingUser.email },
-      process.env.JWT_KEY, 
+      process.env.JWT_KEY,
       { expiresIn: "1h" }
     );
   } catch (err) {
@@ -151,10 +154,77 @@ const login = async (req, res, next) => {
   res.json({
     userId: existingUser.id,
     email: existingUser.email,
-    token: token
+    token: token,
   });
+};
+
+const deleteUser = async (req, res, next) => {
+  const currentUserId = req.params.uid;
+  
+  let user;
+  try {
+    user = await User.findById(currentUserId).populate("places");
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not delete user.",
+      500
+    );
+    return next(error);
+  }
+
+  if (!user) {
+    const error = new HttpError("Could not find user for this id.", 404);
+    return next(error);
+  }
+
+  const userName = user.name;
+
+  if (user.id !== req.userData.userId) {
+    const error = new HttpError(
+      "You are not allowed to delete this user.",
+      401
+    );
+    return next(error);
+  }
+
+  const userImagePath = user.image;
+  const userPlacesImagePaths = user.places.map((place) => place.image);
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+
+    for (const place of user.places) {
+      await place.remove({ session: sess });
+    }
+    await user.remove({ session: sess });
+
+    await sess.commitTransaction();
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not delete user.",
+      500
+    );
+    return next(error);
+  }
+
+  fs.unlink(userImagePath, (err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
+  userPlacesImagePaths.forEach((path) => {
+    fs.unlink(path, (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+  });
+
+  res.status(200).json({ message: "Deleted user: " + userName });
 };
 
 exports.getUsers = getUsers;
 exports.signup = signup;
 exports.login = login;
+exports.deleteUser = deleteUser;

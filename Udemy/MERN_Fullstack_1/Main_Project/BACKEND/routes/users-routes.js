@@ -5,6 +5,8 @@ const router = express.Router();
 
 const usersControllers = require("../controllers/users-controllers");
 const fileUpload = require("../middleware/file-upload");
+const checkAuth = require("../middleware/check-auth");
+
 
 router.get("/", usersControllers.getUsers);
 
@@ -20,5 +22,9 @@ router.post(
 );
 
 router.post("/login", usersControllers.login);
+
+router.use(checkAuth);
+
+router.delete("/:uid/delete", usersControllers.deleteUser);
 
 module.exports = router;
