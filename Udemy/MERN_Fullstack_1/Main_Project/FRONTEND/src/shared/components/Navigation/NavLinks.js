@@ -17,12 +17,16 @@ const NavLinks = (props) => {
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
-  const showDeleteWarningHandler = () => {
+  const showDeleteWarningHandler = event => {
+    event.stopPropagation();
+    props.fade();
     setShowConfirmModal(true);
   };
 
-  const cancelDeleteHandler = () => {
+  const cancelDeleteHandler = event => {
+    event.stopPropagation();
     setShowConfirmModal(false);
+    props.fade();
   };
 
   const confirmDeleteHandler = async () => {
@@ -60,7 +64,7 @@ const NavLinks = (props) => {
         }
       >
         <p>
-          Do you want to proceed and delete this place? please note that it
+          Do you want to proceed and delete this account? please note that it
           can't be undone thereafter.
         </p>
       </Modal>

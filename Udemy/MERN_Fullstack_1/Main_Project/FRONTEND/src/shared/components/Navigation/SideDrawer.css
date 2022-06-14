@@ -8,3 +8,7 @@
   background: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
 }
+
+.side-drawer.faded {
+  opacity: 0.3;
+}
