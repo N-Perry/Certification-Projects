@@ -2,19 +2,9 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { CSSTransition } from "react-transition-group";
 
-import NavLinks from "./NavLinks";
-
 import "./SideDrawer.css";
 
 const SideDrawer = (props) => {
-  const [faded, setFaded] = useState(false);
-
-  const fadeHandler = () => {
-    setFaded((prevFadeStatus) => !prevFadeStatus);
-  };
-
-  console.log(props.children);
-
   const content = (
     <CSSTransition
       in={props.show}
@@ -23,13 +13,8 @@ const SideDrawer = (props) => {
       mountOnEnter
       unmountOnExit
     >
-      <aside
-        className={`side-drawer ${faded && "faded"}`}
-        onClick={props.onClick}
-      >
-        <nav className="main-navigation__drawer-nav">
-          <NavLinks fade={fadeHandler} />
-        </nav>
+      <aside className="side-drawer" onClick={props.onClick}>
+        {props.children}
       </aside>
     </CSSTransition>
   );
